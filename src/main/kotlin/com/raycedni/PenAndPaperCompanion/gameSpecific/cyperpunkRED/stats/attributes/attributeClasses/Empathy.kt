@@ -2,4 +2,4 @@ package com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attrib
 
 import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attributes.attributeSkillListEnums.EmpathySkillListEnum
 
-class Empathy(override var points: Double) : AttributeBaseClass<EmpathySkillListEnum>("Empathy", points, enumValues())
+class Empathy(override var points: Int) : AttributeBaseClass<EmpathySkillListEnum>("Empathy", points, enumValues())

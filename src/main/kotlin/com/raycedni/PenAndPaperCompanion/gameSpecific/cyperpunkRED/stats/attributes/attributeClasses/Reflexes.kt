@@ -2,4 +2,4 @@ package com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attrib
 
 import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attributes.attributeSkillListEnums.ReflexSkillListEnum
 
-class Reflexes(override var points: Double) : AttributeBaseClass<ReflexSkillListEnum>("Reflexes", points, enumValues())
+class Reflexes(override var points: Int) : AttributeBaseClass<ReflexSkillListEnum>("Reflexes", points, enumValues())

@@ -6,7 +6,7 @@ import com.raycedni.PenAndPaperCompanion.general.stats.BaseStat
 
 open class AttributeBaseClass<T : Enum<T>>(
     override val name: String,
-    override var points: Double,
+    override var points: Int,
     skillListEnumValues: Array<T>
 ) : BaseStat {
     protected val skillMap = mutableMapOf<T, SkillValues>()
@@ -26,12 +26,13 @@ open class AttributeBaseClass<T : Enum<T>>(
             throw SkillNotFoundException(skill.name, name)
     }
 
+    fun updateMultipleSkills(skillMap: MutableMap<T, SkillValues>): AttributeBaseClass<T> {
+        skillMap.forEach { (skill, skillvalue) -> updateSkill(skill, skillvalue) }
+        return this
+    }
+
 
     fun getSkillMapCopy(): Map<T, SkillValues> {
         return skillMap.toMap()
     }
-
-    private fun <T : Enum<T>> iterator(values: () -> Array<T>): Iterator<T> = values()
-        .asIterable()
-        .iterator()
 }

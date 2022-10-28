@@ -2,4 +2,4 @@ package com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attrib
 
 import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attributes.attributeSkillListEnums.CoolSkillListEnum
 
-class Cool(override var points: Double) : AttributeBaseClass<CoolSkillListEnum>("Cool", points, enumValues())
+class Cool(override var points: Int) : AttributeBaseClass<CoolSkillListEnum>("Cool", points, enumValues())
