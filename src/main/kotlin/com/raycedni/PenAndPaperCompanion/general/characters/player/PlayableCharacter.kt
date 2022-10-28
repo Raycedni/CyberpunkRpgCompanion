@@ -1,0 +1,3 @@
+interface PlayableCharacter: Character {
+
+}
