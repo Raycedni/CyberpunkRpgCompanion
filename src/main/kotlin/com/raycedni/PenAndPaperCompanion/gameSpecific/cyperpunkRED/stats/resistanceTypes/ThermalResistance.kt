@@ -2,6 +2,6 @@ package com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.resist
 
 import com.raycedni.PenAndPaperCompanion.general.stats.ResistanceTypeBase
 
-class ThermalResistance: ResistanceTypeBase {
+class ThermalResistance : ResistanceTypeBase {
     override val name = "Thermal"
 }

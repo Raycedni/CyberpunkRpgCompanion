@@ -1,7 +1,7 @@
 package com.raycedni.PenAndPaperCompanion.general.stats
 
 interface DamageTypeBase {
-    val name:String
+    val name: String
 
-    fun damageAgainstResistance(resistanceTypeBase: ResistanceTypeBase):Double
+    fun damageAgainstResistance(resistanceTypeBase: ResistanceTypeBase): Double
 }

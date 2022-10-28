@@ -1,4 +1,4 @@
 interface Item {
-    val name:String
-    val monetaryValue:Double
+    val name: String
+    val monetaryValue: Double
 }

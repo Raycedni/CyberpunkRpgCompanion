@@ -1,13 +1,6 @@
 package com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attributes
 
-import com.raycedni.PenAndPaperCompanion.general.stats.BaseStat
+import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attributes.attributeClasses.AttributeBaseClass
+import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attributes.attributeSkillListEnums.BodySkillListEnum
 
-class Body(override val points: Double, val skills: BodySkills) :BaseStat {
-    override val name: String = "Body"
-
-    data class BodySkills(
-        val endurance:SkillValues = SkillValues(),
-        val strengthFeat:SkillValues = SkillValues(),
-        val swimming:SkillValues = SkillValues()
-    )
-}
+class Body(override var points: Double) : AttributeBaseClass<BodySkillListEnum>("Body", points, enumValues())

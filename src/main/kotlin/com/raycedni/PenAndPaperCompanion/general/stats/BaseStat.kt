@@ -1,6 +1,6 @@
 package com.raycedni.PenAndPaperCompanion.general.stats
 
 interface BaseStat {
-    val name:String
-    val points:Double
+    val name: String
+    val points: Double
 }

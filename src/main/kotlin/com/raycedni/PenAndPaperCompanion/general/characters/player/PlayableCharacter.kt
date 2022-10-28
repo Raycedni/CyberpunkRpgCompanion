@@ -1,3 +1,3 @@
-interface PlayableCharacter: Character {
+interface PlayableCharacter : Character {
 
 }

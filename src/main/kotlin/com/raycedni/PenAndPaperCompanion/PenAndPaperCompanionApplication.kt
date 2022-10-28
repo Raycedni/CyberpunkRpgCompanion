@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class PenAndPaperCompanionApplication
 
 fun main(args: Array<String>) {
-	runApplication<PenAndPaperCompanionApplication>(*args)
+    runApplication<PenAndPaperCompanionApplication>(*args)
 }

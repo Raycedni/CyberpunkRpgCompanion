@@ -2,6 +2,6 @@ package com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.resist
 
 import com.raycedni.PenAndPaperCompanion.general.stats.ResistanceTypeBase
 
-class PhysicalResistance: ResistanceTypeBase {
+class PhysicalResistance : ResistanceTypeBase {
     override val name = "Physical"
 }
