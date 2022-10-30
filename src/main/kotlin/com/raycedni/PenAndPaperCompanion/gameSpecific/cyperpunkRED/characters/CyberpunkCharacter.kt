@@ -1,17 +1,28 @@
-import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attributes.Body
-import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attributes.attributeClasses.Cool
-import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attributes.attributeClasses.Empathy
-import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attributes.attributeClasses.Intelligence
-import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attributes.attributeClasses.Reflexes
-import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attributes.attributeClasses.Tech
+import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attributes.attributeClasses.Attribute
+import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attributes.attributeSkillListEnums.BodySkillListEnum
+import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attributes.attributeSkillListEnums.CoolSkillListEnum
+import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attributes.attributeSkillListEnums.EmpathySkillListEnum
+import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attributes.attributeSkillListEnums.IntelligenceSkillListEnum
+import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attributes.attributeSkillListEnums.ReflexesSkillListEnum
+import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attributes.attributeSkillListEnums.TechSkillListEnum
+import kotlin.math.max
 
 class CyberpunkCharacter(
     override var name: String,
     override var health: Double,
-    override var inventory: MutableMap<String, Item>,
-    private val attributes: CyberpunkRedCharacterAttributes
+    private var humanity: Double
 
 ) : Character {
+    override var inventory: MutableMap<String, Item> = mutableMapOf()
+    private val attributes: MutableMap<String, Attribute> = mutableMapOf(
+        defaultAttributeEntry<BodySkillListEnum>(),
+        defaultAttributeEntry<CoolSkillListEnum>(),
+        defaultAttributeEntry<EmpathySkillListEnum>(),
+        defaultAttributeEntry<IntelligenceSkillListEnum>(),
+        defaultAttributeEntry<ReflexesSkillListEnum>(),
+        defaultAttributeEntry<TechSkillListEnum>()
+    )
+
     override fun addItemToInventory(item: Item) {
         TODO("Not yet implemented")
     }
@@ -20,16 +31,50 @@ class CyberpunkCharacter(
         TODO("Not yet implemented")
     }
 
-    fun getCopyOfAttributes(): CyberpunkRedCharacterAttributes {
-        return attributes.copy()
+    fun getHumanity() = humanity
+
+    fun removeHumanity(amount: Double) {
+        if (amount > 0)
+            humanity = max(humanity - amount, 0.0)
+        else
+            throw IllegalArgumentException()
     }
 
-    data class CyberpunkRedCharacterAttributes(
-        val body: Body,
-        val cool: Cool,
-        val empathy: Empathy,
-        val intelligence: Intelligence,
-        val reflexes: Reflexes,
-        val tech: Tech
-    )
+    fun getAttributes(): Map<String, Attribute> {
+        return attributes.toMap()
+    }
+
+    fun setSkillPointsTo(attributeOfSkill: String, skillName: String, newSkillPoints: Int): CyberpunkCharacter {
+//        TODO
+//        attributes[attributeOfSkill]?.skillsInAttribute?.get(skillName)?.basePoints = newSkillPoints
+        return this
+    }
+
+    fun increaseSkillPointsBy(attributeOfSkill: String, skillName: String, newSkillPoints: Int): CyberpunkCharacter {
+        if (newSkillPoints > 0) {
+//            TODO
+//            attributes[attributeOfSkill]?.skillsInAttribute?.get(skillName)?.basePoints?.plus(newSkillPoints)
+            return this
+        } else
+            throw IllegalArgumentException()
+    }
+
+    fun addNewAttribute(attributeName: String, attributeSkillList: List<String>): CyberpunkCharacter {
+        attributes.putIfAbsent(attributeName, defaultAttributeEntry(attributeName, attributeSkillList))
+        return this
+    }
+
+    private inline fun <reified T : Enum<T>> getEnumEntriesAsList(): List<String> {
+        return enumValues<T>().joinToString { it.name }.split(", ")
+    }
+
+    private inline fun <reified T : Enum<T>> defaultAttributeEntry(): Pair<String, Attribute> {
+        val attributeName = T::class.simpleName.toString().substringBefore("SkillList")
+
+        return attributeName to defaultAttributeEntry(attributeName, getEnumEntriesAsList<T>())
+    }
+
+    fun defaultAttributeEntry(attributeName: String, attributeSkillList: List<String>): Attribute {
+        return Attribute(attributeName, 0, attributeSkillList)
+    }
 }

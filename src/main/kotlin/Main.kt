@@ -1,6 +1,7 @@
-
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attributes.Body
+import org.springframework.context.annotation.Bean
 
 fun main(args: Array<String>) {
     println("Hello World!")
@@ -8,10 +9,15 @@ fun main(args: Array<String>) {
     // Try adding program arguments via Run/Debug configuration.
     // Learn more about running applications: https://www.jetbrains.com/help/idea/running-applications.html.
 //    println("Program arguments: ${args.joinToString()}")
-    var testBody = Body(5.0)
-    val testBodyJson:String = jacksonObjectMapper().writeValueAsString(testBody)
+
 //    testBody = jacksonObjectMapper().readValue(testBodyJson)
-    println(testBodyJson)
+    println(
+        defaultJsonMapper().writerWithDefaultPrettyPrinter()
+            .writeValueAsString(CyberpunkCharacter("Johnny", 300.5, 150.0))
+    )
+}
 
-
+@Bean
+fun defaultJsonMapper(): ObjectMapper {
+    return jacksonObjectMapper().registerModule(Jdk8Module())
 }

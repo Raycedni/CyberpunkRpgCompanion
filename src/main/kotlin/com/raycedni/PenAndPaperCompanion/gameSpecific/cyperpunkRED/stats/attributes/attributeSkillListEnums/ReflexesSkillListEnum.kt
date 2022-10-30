@@ -1,6 +1,6 @@
 package com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attributes.attributeSkillListEnums
 
-enum class ReflexSkillListEnum {
+enum class ReflexesSkillListEnum {
     archery,
     athletics,
     brawling,
