@@ -1,5 +1,6 @@
 package com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attributes
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.implants.Implant
 import java.util.Optional
 
@@ -14,6 +15,17 @@ class SkillValue(private var basePoints: Int = 0, private var skillChip: Optiona
         skillChip = Optional.of(implant)
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (other is SkillValue)
+            return (this.basePoints.equals(other.basePoints) &&
+                    this.skillChip.equals(other.getSkillChip()) &&
+                    this.temporaryEffects.equals(other.temporaryEffects)
+                    )
+        else
+            return super.equals(other)
+    }
+
+    @JsonIgnore
     fun getPoints(): Int {
         return basePoints - getSumOfAllTempEffects()
     }
@@ -43,6 +55,7 @@ class SkillValue(private var basePoints: Int = 0, private var skillChip: Optiona
         return listOfPoints
     }
 
+    fun getallTemporaryEffects() = temporaryEffects.toList()
     fun cleanseAllTemporaryEffects() = temporaryEffects.removeAll { true }
     fun cleanseAllNegativeEffects() = temporaryEffects.removeAll { it.valueChange < 0 }
     fun cleanseAllPositiveEffects() = temporaryEffects.removeAll { it.valueChange > 0 }

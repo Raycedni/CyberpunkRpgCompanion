@@ -10,17 +10,24 @@ import kotlin.math.max
 class CyberpunkCharacter(
     override var name: String,
     override var health: Double,
-    private var humanity: Double
+    private var humanity: Double,
+    private val attributes: MutableMap<String, Attribute>
 
 ) : Character {
     override var inventory: MutableMap<String, Item> = mutableMapOf()
-    private val attributes: MutableMap<String, Attribute> = mutableMapOf(
-        defaultAttributeEntry<BodySkillListEnum>(),
-        defaultAttributeEntry<CoolSkillListEnum>(),
-        defaultAttributeEntry<EmpathySkillListEnum>(),
-        defaultAttributeEntry<IntelligenceSkillListEnum>(),
-        defaultAttributeEntry<ReflexesSkillListEnum>(),
-        defaultAttributeEntry<TechSkillListEnum>()
+
+    constructor(name: String, health: Double, humanity: Double) : this(
+        name,
+        health,
+        humanity,
+        mutableMapOf(
+            defaultAttributeEntry<BodySkillListEnum>(),
+            defaultAttributeEntry<CoolSkillListEnum>(),
+            defaultAttributeEntry<EmpathySkillListEnum>(),
+            defaultAttributeEntry<IntelligenceSkillListEnum>(),
+            defaultAttributeEntry<ReflexesSkillListEnum>(),
+            defaultAttributeEntry<TechSkillListEnum>()
+        )
     )
 
     override fun addItemToInventory(item: Item) {
@@ -29,6 +36,16 @@ class CyberpunkCharacter(
 
     override fun removeItemFromInventory() {
         TODO("Not yet implemented")
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is CyberpunkCharacter)
+            return (this.name.equals(other.name) &&
+                    this.health.equals(other.health) &&
+                    this.humanity.equals(other.humanity) &&
+                    this.attributes.equals(other.attributes))
+        else
+            return super.equals(other)
     }
 
     fun getHumanity() = humanity
@@ -63,18 +80,18 @@ class CyberpunkCharacter(
         attributes.putIfAbsent(attributeName, defaultAttributeEntry(attributeName, attributeSkillList))
         return this
     }
+}
 
-    private inline fun <reified T : Enum<T>> getEnumEntriesAsList(): List<String> {
-        return enumValues<T>().joinToString { it.name }.split(", ")
-    }
+private inline fun <reified T : Enum<T>> getEnumEntriesAsList(): List<String> {
+    return enumValues<T>().joinToString { it.name }.split(", ")
+}
 
-    private inline fun <reified T : Enum<T>> defaultAttributeEntry(): Pair<String, Attribute> {
-        val attributeName = T::class.simpleName.toString().substringBefore("SkillList")
+private inline fun <reified T : Enum<T>> defaultAttributeEntry(): Pair<String, Attribute> {
+    val attributeName = T::class.simpleName.toString().substringBefore("SkillList")
 
-        return attributeName to defaultAttributeEntry(attributeName, getEnumEntriesAsList<T>())
-    }
+    return attributeName to defaultAttributeEntry(attributeName, getEnumEntriesAsList<T>())
+}
 
-    fun defaultAttributeEntry(attributeName: String, attributeSkillList: List<String>): Attribute {
-        return Attribute(attributeName, 0, attributeSkillList)
-    }
+private fun defaultAttributeEntry(attributeName: String, attributeSkillList: List<String>): Attribute {
+    return Attribute(attributeName, 0, attributeSkillList)
 }

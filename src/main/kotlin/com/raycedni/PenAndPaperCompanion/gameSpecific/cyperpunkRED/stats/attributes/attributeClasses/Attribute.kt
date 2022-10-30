@@ -7,24 +7,33 @@ import com.raycedni.PenAndPaperCompanion.general.stats.BaseStat
 open class Attribute(
     override val name: String,
     override var points: Int,
-    attributeSkillList: List<String>
+    val attributeSkillMap: MutableMap<String, SkillValue>
 ) : BaseStat {
-    val skillsInAttribute = mutableMapOf<String, SkillValue>()
+    constructor(name: String, points: Int, attributeSkillList: List<String>) : this(
+        name,
+        points,
+        attributeSkillList.toAttributeSkillMap()
+    )
 
-    init {
-        attributeSkillList.forEach { skillsInAttribute.putIfAbsent(it, SkillValue()) }
+    override fun equals(other: Any?): Boolean {
+        if (other is Attribute)
+            return (this.name.equals(other.name) &&
+                    this.points.equals(other.points) &&
+                    this.attributeSkillMap.equals(other.attributeSkillMap))
+        else
+            return super.equals(other)
     }
 
     fun getSkill(skill: String): SkillValue? {
-        if (skillsInAttribute.containsKey(skill))
-            return skillsInAttribute[skill]
+        if (attributeSkillMap.containsKey(skill))
+            return attributeSkillMap[skill]
         else
             throw SkillNotFoundException(skill, name)
     }
 
     fun updateSkill(skill: String, skillValue: SkillValue) {
-        if (skillsInAttribute.containsKey(skill))
-            skillsInAttribute[skill] = skillValue
+        if (attributeSkillMap.containsKey(skill))
+            attributeSkillMap[skill] = skillValue
         else
             throw SkillNotFoundException(skill, name)
     }
@@ -35,6 +44,13 @@ open class Attribute(
 
 
     fun getSkills(): Map<String, SkillValue> {
-        return skillsInAttribute.toMap()
+        return attributeSkillMap.toMap()
     }
+}
+
+private fun List<String>.toAttributeSkillMap(): MutableMap<String, SkillValue> {
+    val map = mutableMapOf<String, SkillValue>()
+    this.forEach { map.putIfAbsent(it, SkillValue()) }
+
+    return map
 }
