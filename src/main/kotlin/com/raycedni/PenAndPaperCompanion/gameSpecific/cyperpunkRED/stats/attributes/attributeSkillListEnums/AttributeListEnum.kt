@@ -1,5 +1,6 @@
 package com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attributes.attributeSkillListEnums
 
+@Deprecated("failed attempt")
 enum class AttributeListEnum {
     ;
 

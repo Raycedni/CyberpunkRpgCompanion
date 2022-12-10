@@ -1,16 +1,42 @@
 package com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.implants
 
-import CyberpunkCharacter
 import Item
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.serializers.ImplantDeserializer
+import java.util.UUID
 
+@JsonDeserialize(using = ImplantDeserializer::class)
 class Implant(
-    override val name: String,
-    override val monetaryValue: Double,
-//    val implantType: ImplantType,
-//    val listOfAffects: List<>
-    private val affectOnCharacter: List<(CyberpunkCharacter) -> Double>
-) : Item {
-    fun installImplant(implantReceiver: CyberpunkCharacter) {
-        affectOnCharacter.forEach { implantReceiver.removeHumanity(it.invoke(implantReceiver)) }
+    itemClassId: Double,
+    objectId: UUID,
+    name: String,
+    monetaryValue: Double,
+    @JsonIgnore
+    private val effectsOnCharacter: MutableList<(effect: Any) -> Unit> = mutableListOf()
+) : Item(itemClassId, name, monetaryValue, objectId) {
+    @JsonIgnore
+    fun getListOfEffectsOnCharacter(): List<(effect: Any) -> Unit> = effectsOnCharacter.toList()
+
+    fun addEffectOnCharacter(effect: (effect: Any) -> Unit): Implant {
+        effectsOnCharacter.add(effect)
+        return this
+    }
+
+    fun addEffectOnCharacter(effectList: List<(effect: Any) -> Unit>): Implant {
+        effectList.forEach { addEffectOnCharacter(it) }
+        return this
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Implant
+
+        return other.name.equals(name) &&
+                other.itemClassId.equals(itemClassId) &&
+//                other.objectId.equals(objectId) &&
+                other.monetaryValue.equals(monetaryValue)
     }
 }

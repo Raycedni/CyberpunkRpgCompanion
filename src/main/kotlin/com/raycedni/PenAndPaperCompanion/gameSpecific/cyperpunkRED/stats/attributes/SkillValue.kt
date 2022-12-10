@@ -2,11 +2,18 @@ package com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attrib
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.implants.Implant
+import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.temporarypointchanges.TemporaryPointHandler
 import java.util.Optional
 
 
 class SkillValue(private var basePoints: Int = 0, private var skillChip: Optional<Implant> = Optional.empty()) {
-    protected var temporaryEffects: MutableList<TemporaryPointChange> = mutableListOf()
+    val temporaryPointHandler = TemporaryPointHandler()
+
+    @JsonIgnore
+    protected var currentPoints: Int = 0
+        get() {
+            return basePoints + temporaryPointHandler.getSumOfAllEffects()
+        }
 
     fun getSkillChip() = skillChip
     fun getBasePoints() = basePoints
@@ -19,44 +26,16 @@ class SkillValue(private var basePoints: Int = 0, private var skillChip: Optiona
         if (other is SkillValue)
             return (this.basePoints.equals(other.basePoints) &&
                     this.skillChip.equals(other.getSkillChip()) &&
-                    this.temporaryEffects.equals(other.temporaryEffects)
+                    this.temporaryPointHandler.equals(other.temporaryPointHandler)
                     )
         else
             return super.equals(other)
     }
 
-    @JsonIgnore
-    fun getPoints(): Int {
-        return basePoints - getSumOfAllTempEffects()
+    fun affectBasePointsBy(pointsWhichWillBeApplied: Int) {
+        basePoints += pointsWhichWillBeApplied
     }
 
-    private fun getSumOfAllTempEffects(): Int {
-        var sumOfAllEffects = 0
-        temporaryEffects.forEach {
-            if (it.isStillValid())
-                sumOfAllEffects.plus(it.valueChange)
-            else
-                temporaryEffects.remove(it)
-        }
-        return temporaryEffects.filter { it.isStillValid() }.toListOfInt().sum()
-    }
-
-    private fun checkForAndRemoveInvalidEffects(): MutableList<TemporaryPointChange> {
-//        TODO
-//        temporaryEffects.forEach{if(!it.isStillValid()) temporaryEffects.remove(it)}
-        return mutableListOf()
-    }
-
-    private fun Iterable<TemporaryPointChange>.toListOfTemporaryEffects() = this.toList()
-
-    private fun Iterable<TemporaryPointChange>.toListOfInt(): List<Int> {
-        val listOfPoints = mutableListOf<Int>()
-        this.forEach { listOfPoints.add(it.valueChange) }
-        return listOfPoints
-    }
-
-    fun getallTemporaryEffects() = temporaryEffects.toList()
-    fun cleanseAllTemporaryEffects() = temporaryEffects.removeAll { true }
-    fun cleanseAllNegativeEffects() = temporaryEffects.removeAll { it.valueChange < 0 }
-    fun cleanseAllPositiveEffects() = temporaryEffects.removeAll { it.valueChange > 0 }
+    fun setPointsTo(newAmountOfPoints: Int) = if (newAmountOfPoints > 0) basePoints =
+        newAmountOfPoints else throw IllegalArgumentException("this method only accepts positive values")
 }
