@@ -4,7 +4,7 @@ class TemporaryPointChange(
     val valueChange: Int,
     val typeOfTemporaryPointChange: TypesOfTemporaryPointChangeEnum = TypesOfTemporaryPointChangeEnum.NEUTRAL,
     private val condition: () -> Boolean,
-    val causedBy: Any
+    val effectSource: TemporaryEffectSource<*>
 ) {
     fun isStillValid(): Boolean = condition.invoke()
     override fun equals(other: Any?): Boolean {
@@ -18,5 +18,13 @@ class TemporaryPointChange(
         if (condition != other.condition) return false
 
         return true
+    }
+
+    override fun hashCode(): Int {
+        var result = valueChange
+        result = 31 * result + typeOfTemporaryPointChange.hashCode()
+        result = 31 * result + condition.hashCode()
+        result = 31 * result + effectSource.hashCode()
+        return result
     }
 }

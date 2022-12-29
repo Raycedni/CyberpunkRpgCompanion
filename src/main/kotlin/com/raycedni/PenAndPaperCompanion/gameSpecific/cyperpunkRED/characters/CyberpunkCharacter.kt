@@ -8,6 +8,7 @@ import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attribu
 import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attributes.attributeSkillListEnums.IntelligenceSkillListEnum
 import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attributes.attributeSkillListEnums.ReflexesSkillListEnum
 import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.attributes.attributeSkillListEnums.TechSkillListEnum
+import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.temporarypointchanges.TemporaryEffectSource
 import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.temporarypointchanges.TemporaryPointChange
 import com.raycedni.PenAndPaperCompanion.gameSpecific.cyperpunkRED.stats.temporarypointchanges.TypesOfTemporaryPointChangeEnum
 import com.raycedni.PenAndPaperCompanion.general.characters.Inventory
@@ -93,7 +94,7 @@ class CyberpunkCharacter(
         skillPointFluctiation: Int,
         temporaryPointChangeType: TypesOfTemporaryPointChangeEnum,
         condition: () -> Boolean,
-        causedBy: Any
+        causedBy: TemporaryEffectSource<*>
     ) {
         attributes[attribute]?.temporaryPointHandler?.addTemporaryEffect(
             TemporaryPointChange(
@@ -110,7 +111,7 @@ class CyberpunkCharacter(
         skillPointFluctiation: Int,
         temporaryPointChangeType: TypesOfTemporaryPointChangeEnum,
         condition: () -> Boolean,
-        causedBy: Any
+        causedBy: TemporaryEffectSource<*>
     ) {
         attributes[getAttributeOfSkill(skillName)]?.attributeSkillMap?.get(skillName)
             ?.temporaryPointHandler?.addTemporaryEffect(
